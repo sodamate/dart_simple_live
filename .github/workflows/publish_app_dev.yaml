@@ -15,21 +15,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        # 不再指定 ref，自动使用触发事件的 tag 或分支
 
-      - name: Download Android keystore
-        id: android_keystore
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: keystore.jks
-          encodedString: ${{ secrets.KEYSTORE_BASE64 }}
-
-      - name: Create key.properties
-        run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > simple_live_app/android/key.properties
-          echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> simple_live_app/android/key.properties
-          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> simple_live_app/android/key.properties
-          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> simple_live_app/android/key.properties
+      # 签名步骤全部注释掉
+      # - name: Download Android keystore
+      #   ...
 
       - uses: actions/setup-java@v4
         with:
@@ -48,18 +37,16 @@ jobs:
           cd simple_live_app
           flutter pub get
 
-      - name: Build APK
+      - name: Build APK (debug)
         run: |
           cd simple_live_app
-          flutter build apk --release --split-per-abi
+          flutter build apk --debug --split-per-abi
 
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: android
           path: |
-            simple_live_app/build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-            simple_live_app/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            simple_live_app/build/app/outputs/flutter-apk/app-x86_64-release.apk
+            simple_live_app/build/app/outputs/flutter-apk/app-*-debug.apk
 
-      - run: echo "🍏 Android build completed."
+      - run: echo "🍏 Android debug APK built successfully."
