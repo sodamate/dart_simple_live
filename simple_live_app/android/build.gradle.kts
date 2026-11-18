@@ -1,12 +1,16 @@
 plugins {
     id("com.android.application") apply false
-    kotlin("android") apply false
 }
+
 allprojects {
     repositories {
         google()
         mavenCentral()
     }
+}
+
+subprojects {
+    apply(plugin = "org.jetbrains.kotlin.android")
 }
 
 val newBuildDir: Directory =
