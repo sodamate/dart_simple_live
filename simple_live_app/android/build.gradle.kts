@@ -1,6 +1,6 @@
 plugins {
-    id("com.android.application")
-    kotlin("android")
+    id("com.android.application") apply false
+    kotlin("android") apply false
 }
 allprojects {
     repositories {
