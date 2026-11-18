@@ -16,9 +16,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 签名步骤全部注释掉
-      # - name: Download Android keystore
-      #   ...
+      # 创建 dummy 签名文件，避免 build.gradle.kts 报 null
+      - name: Create dummy keystore
+        run: |
+          mkdir -p simple_live_app/android
+          touch /tmp/dummy.jks
+          echo "storeFile=/tmp/dummy.jks" > simple_live_app/android/key.properties
+          echo "storePassword=dummy" >> simple_live_app/android/key.properties
+          echo "keyPassword=dummy" >> simple_live_app/android/key.properties
+          echo "keyAlias=dummy" >> simple_live_app/android/key.properties
 
       - uses: actions/setup-java@v4
         with:
